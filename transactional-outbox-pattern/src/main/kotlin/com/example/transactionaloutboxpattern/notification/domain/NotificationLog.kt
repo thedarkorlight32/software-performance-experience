@@ -1,4 +1,4 @@
-package com.example.transactionaloutboxpattern.notificationdomain
+package com.example.transactionaloutboxpattern.notification.domain
 
 import jakarta.persistence.*
 import java.time.Instant

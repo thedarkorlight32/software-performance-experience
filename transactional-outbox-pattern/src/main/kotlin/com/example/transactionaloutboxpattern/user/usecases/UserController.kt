@@ -1,6 +1,6 @@
-package com.example.transactionaloutboxpattern.userapplication
+package com.example.transactionaloutboxpattern.user.usecases
 
-import com.example.transactionaloutboxpattern.userdomain.UserStatus
+import com.example.transactionaloutboxpattern.user.domain.UserStatus
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 

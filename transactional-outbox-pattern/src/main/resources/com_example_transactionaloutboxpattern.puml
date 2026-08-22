@@ -1,0 +1,57 @@
+@startuml
+title com.example.transactionaloutboxpattern - Package/Class overview
+
+package "com.example.transactionaloutboxpattern" {
+  package user {
+    package domain {
+      class User
+      class UserStatus
+      class UserCreatedEvent
+      class UserUpdatedEvent
+      class UserStatusChangedEvent
+    }
+    package db {
+      class UserEntity
+      interface UserRepository
+    }
+    package application {
+      class UserController
+      class UserCommandService
+    }
+  }
+
+  package notification {
+    package domain {
+      class NotificationLog
+      interface NotificationService
+    }
+    package db {
+      interface NotificationLogRepository
+    }
+  }
+
+  package outbox {
+    class OutboxEvent
+    interface OutboxEventRepository
+    class UserOutboxEventPublisher
+  }
+
+  class TransactionalOutboxPatternApplication
+}
+
+'User' --> 'UserCreatedEvent' : records
+UserCommandService ..> UserRepository : uses
+UserCommandService ..> OutboxEventRepository : writes outbox events
+UserOutboxEventPublisher ..> OutboxEventRepository : reads pending events
+UserOutboxEventPublisher ..> NotificationService : triggers notifications
+NotificationService ..> NotificationLogRepository : persists logs
+UserStatusChangedEvent ..> UserOutboxEventPublisher : payload for
+TransactionalOutboxPatternApplication ..> UserOutboxEventPublisher
+
+note left of outbox::UserOutboxEventPublisher
+Scheduled job that publishes/consumes
+outbox events and calls NotificationService
+end note
+
+skinparam packageStyle rect
+@enduml

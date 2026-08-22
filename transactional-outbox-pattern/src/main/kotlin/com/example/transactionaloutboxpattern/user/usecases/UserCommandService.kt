@@ -1,11 +1,11 @@
-package com.example.transactionaloutboxpattern.userapplication
+package com.example.transactionaloutboxpattern.user.usecases
 
 import com.example.transactionaloutboxpattern.outbox.OutboxEvent
 import com.example.transactionaloutboxpattern.outbox.OutboxEventRepository
-import com.example.transactionaloutboxpattern.userdomain.User
-import com.example.transactionaloutboxpattern.userdomain.UserStatus
-import com.example.transactionaloutboxpattern.userinfrastructure.UserEntity
-import com.example.transactionaloutboxpattern.userinfrastructure.UserRepository
+import com.example.transactionaloutboxpattern.user.domain.User
+import com.example.transactionaloutboxpattern.user.domain.UserStatus
+import com.example.transactionaloutboxpattern.user.db.UserEntity
+import com.example.transactionaloutboxpattern.user.db.UserRepository
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

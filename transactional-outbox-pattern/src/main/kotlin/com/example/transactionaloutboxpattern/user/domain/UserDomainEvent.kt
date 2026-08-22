@@ -1,4 +1,4 @@
-package com.example.transactionaloutboxpattern.userdomain
+package com.example.transactionaloutboxpattern.user.domain
 
 import java.time.Instant
 

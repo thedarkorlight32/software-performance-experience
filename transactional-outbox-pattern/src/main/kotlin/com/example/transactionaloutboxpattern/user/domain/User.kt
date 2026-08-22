@@ -1,4 +1,5 @@
-package com.example.transactionaloutboxpattern.userdomain
+package com.example.transactionaloutboxpattern.user.domain
+
 
 class User(
     var username: String,

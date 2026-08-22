@@ -1,8 +1,8 @@
 package com.example.transactionaloutboxpattern.outbox
 
-import com.example.transactionaloutboxpattern.notificationdomain.NotificationService
-import com.example.transactionaloutboxpattern.userdomain.UserStatus
-import com.example.transactionaloutboxpattern.userdomain.UserStatusChangedEvent
+import com.example.transactionaloutboxpattern.notification.domain.NotificationService
+import com.example.transactionaloutboxpattern.user.domain.UserStatus
+import com.example.transactionaloutboxpattern.user.domain.UserStatusChangedEvent
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

@@ -1,6 +1,6 @@
-package com.example.transactionaloutboxpattern.notificationdomain
+package com.example.transactionaloutboxpattern.notification.domain
 
-import com.example.transactionaloutboxpattern.notificationinfrastructure.NotificationLogRepository
+import com.example.transactionaloutboxpattern.notification.db.NotificationLogRepository
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service

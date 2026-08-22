@@ -1,54 +1,53 @@
 # Transactional Outbox Pattern
 
-This project demonstrates a transactional outbox pattern in an onion architecture using Spring Boot and Kotlin.
+The transactional outbox pattern is a way to reliably publish domain events without losing them when a database transaction is committed. In a normal workflow, business data and side effects can get out of sync if a database write succeeds but an external notification or event publication fails. The outbox pattern solves this by storing the event in the same database transaction as the business change. Later, a background process reads those persisted events and delivers them asynchronously.
 
-## Why this is onion architecture
+This sub-project follows the onion architecture: the domain model sits at the center, application services orchestrate use cases, and infrastructure concerns such as persistence, HTTP, and scheduled jobs live on the outside. Dependencies always point inward, so the core domain stays independent from frameworks and technical details.
 
-Onion architecture is about keeping the business logic at the center and pushing technical concerns outward. In this project the dependency direction is explicit:
+## User domain
 
-- The core of the application is the `userdomain` package.
-- That package contains the business rules and the `User` aggregate itself.
-- It knows nothing about databases, HTTP controllers, or scheduling.
-- The application layer (`userapplication`) orchestrates use cases, but it still depends on the core domain rather than the other way around.
-- The infrastructure layer (`userinfrastructure`, `outbox`, `notificationinfrastructure`) is at the outer edge and is responsible for persistence, scheduled processing, and integration concerns.
+The user domain is the main business area of the application. It contains the `User` aggregate and related domain events such as:
 
-This matches onion architecture because:
+- `UserCreatedEvent`
+- `UserUpdatedEvent`
+- `UserStatusChangedEvent`
 
-- business rules live at the center
-- outer layers can implement technical capabilities
-- dependencies point inward, never outward
-- the domain can be tested without framework concerns
-
-## Domain layer
-
-The user domain is the center of the onion. It contains a `User` aggregate with:
-- username
-- firstName
-- lastName
-- status (`ACTIVE` / `INACTIVE`)
-
-Each field update emits a domain event. A status transition from `INACTIVE` to `ACTIVE` also triggers the outbox flow that notifies the notification domain.
-
-## Application layer
-
-The `userapplication` package coordinates the domain operations. The command service creates and updates users while ensuring the domain events are captured and persisted as an outbox record in the same transaction.
-
-## Infrastructure layer
-
-The infrastructure layer contains the adapters that talk to external systems:
-
-- `userinfrastructure` stores the `UserEntity` in the database
-- `outbox` stores event records in a separate table so they are not lost when the business transaction commits
-- `notificationinfrastructure` stores notification logs
-
-The scheduled outbox processor runs outside the business transaction, which is the core idea of the transactional outbox pattern.
+A user has fields such as username, first name, last name, and status (`ACTIVE` / `INACTIVE`). When a user is created or updated, the aggregate records domain events instead of directly triggering side effects.
 
 ## Notification domain
 
-The notification flow is intentionally separated from the user domain. When the outbox processor detects an `INACTIVE -> ACTIVE` status change, it calls the notification service. At this stage the notification is logged rather than sent through an email provider.
+The notification domain represents the downstream concern that reacts to important business changes. In this example, it is responsible for recording activation notifications when a user transitions from `INACTIVE` to `ACTIVE`.
 
-## Run
+This domain stays separate from the user domain. It is not directly called during the user update transaction; instead, it is invoked later by the outbox processor.
+
+## How the outbox message reaches the notification flow
+
+The flow is:
+
+1. A user update or creation is executed inside a transactional service.
+2. The domain emits events and the application service persists them as outbox records in the same transaction.
+3. The user data and the outbox event are committed together.
+4. A scheduled publisher (`UserOutboxEventPublisher`) scans for unprocessed outbox events.
+5. When it sees a `UserStatusChangedEvent`, it checks whether the status changed from `INACTIVE` to `ACTIVE`.
+6. If so, it calls the `NotificationService`.
+7. The notification service records the notification in the notification log repository.
+
+This keeps the main business transaction atomic while moving the side effect to a reliable asynchronous step.
+
+## Project structure
+
+- `user/domain` contains the business model and domain logic
+- `user/usecases` contains application services and controller endpoints
+- `user/db` contains JPA persistence mapping
+- `notification/domain` contains the notification logic
+- `notification/db` contains the notification log persistence
+- `outbox` contains the event store and scheduled processor
+
+## How to run
+
+From the parent project directory, run only this artifact's tests with:
 
 ```bash
-./mvnw test
+./mvnw -pl transactional-outbox-pattern test
 ```
+The app exposes the user API and demonstrates the transactional outbox flow end-to-end.

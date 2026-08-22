@@ -1,11 +1,11 @@
 package com.example.transactionaloutboxpattern
 
-import com.example.transactionaloutboxpattern.notificationinfrastructure.NotificationLogRepository
+import com.example.transactionaloutboxpattern.notification.db.NotificationLogRepository
 import com.example.transactionaloutboxpattern.outbox.OutboxEventRepository
 import com.example.transactionaloutboxpattern.outbox.UserOutboxEventPublisher
-import com.example.transactionaloutboxpattern.userapplication.UserCommandService
-import com.example.transactionaloutboxpattern.userdomain.UserStatus
-import com.example.transactionaloutboxpattern.userinfrastructure.UserRepository
+import com.example.transactionaloutboxpattern.user.usecases.UserCommandService
+import com.example.transactionaloutboxpattern.user.domain.UserStatus
+import com.example.transactionaloutboxpattern.user.db.UserRepository
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test

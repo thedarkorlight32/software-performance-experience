@@ -1,4 +1,4 @@
-package com.example.transactionaloutboxpattern.userinfrastructure
+package com.example.transactionaloutboxpattern.user.db
 
 import org.springframework.data.jpa.repository.JpaRepository
 

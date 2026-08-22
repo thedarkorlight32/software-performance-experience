@@ -1,7 +1,7 @@
-package com.example.transactionaloutboxpattern.userinfrastructure
+package com.example.transactionaloutboxpattern.user.db
 
-import com.example.transactionaloutboxpattern.userdomain.User
-import com.example.transactionaloutboxpattern.userdomain.UserStatus
+import com.example.transactionaloutboxpattern.user.domain.User
+import com.example.transactionaloutboxpattern.user.domain.UserStatus
 import jakarta.persistence.*
 
 @Entity
