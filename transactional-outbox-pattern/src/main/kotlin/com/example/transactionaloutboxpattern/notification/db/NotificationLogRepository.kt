@@ -1,0 +1,6 @@
+package com.example.transactionaloutboxpattern.notificationinfrastructure
+
+import com.example.transactionaloutboxpattern.notificationdomain.NotificationLog
+import org.springframework.data.jpa.repository.JpaRepository
+
+interface NotificationLogRepository : JpaRepository<NotificationLog, Long>

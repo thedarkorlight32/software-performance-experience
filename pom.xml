@@ -13,6 +13,7 @@
 
     <modules>
         <module>big-table-join-performance-test</module>
+        <module>transactional-outbox-pattern</module>
     </modules>
 
     <properties>
